@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Dice Assemblers - Playtest</title>
+    <style>
+      html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #0e1116; overflow: hidden; }
+      #unity-canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; background: #0e1116; touch-action: none; }
+      #loading { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+                 color: #dbb861; font: 600 20px/1.4 system-ui, "Yu Gothic", "Hiragino Sans", sans-serif; letter-spacing: 0.08em; }
+      #loading small { margin-top: 10px; color: #8b8f96; font-weight: 400; letter-spacing: 0; font-size: 13px; }
+      #bar { margin-top: 18px; width: min(320px, 60vw); height: 6px; background: #232830; border-radius: 3px; overflow: hidden; }
+      #bar > div { width: 0%; height: 100%; background: #dbb861; transition: width .15s linear; }
+      #error { display: none; position: fixed; left: 0; right: 0; top: 40%; text-align: center; color: #e07070; font: 16px/1.5 system-ui, sans-serif; padding: 0 24px; }
+    </style>
+  </head>
+  <body>
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
+    <div id="loading">DICE ASSEMBLERS<div id="bar"><div id="fill"></div></div><small>読み込み中… / Loading (first time takes a moment)</small></div>
+    <div id="error"></div>
+    <script src="Build/WebGL.loader.js"></script>
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+      createUnityInstance(canvas, {
+        arguments: [],
+        dataUrl: "Build/WebGL.data",
+        frameworkUrl: "Build/WebGL.framework.js",
+        codeUrl: "Build/WebGL.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "DiceAssembly",
+        productVersion: "0.1.0",
+      }, function (progress) {
+        document.getElementById("fill").style.width = Math.round(progress * 100) + "%";
+      }).then(function (unityInstance) {
+        window.diceUnity = unityInstance;
+        document.getElementById("loading").style.display = "none";
+      }).catch(function (message) {
+        document.getElementById("loading").style.display = "none";
+        var e = document.getElementById("error");
+        e.style.display = "block";
+        e.textContent = "Could not start the game: " + message;
+      });
+    </script>
+  </body>
+</html>
