@@ -13,6 +13,42 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <title>Dice Assemblers - Playtest</title>
+    <script>
+      // "Add to home screen": mobile only. Android (Chrome / Edge / ...) fires beforeinstallprompt once the manifest is installable; it can fire long
+      // before Unity is up, so it is caught here and Unity polls it through the DAWEB_* jslib functions. iPhone / iPad have no such event (a how-to
+      // overlay is shown instead). A PC gets no button at all.
+      window.diceInstall = (function () {
+        var deferred = null, installedFlag = false;
+        var ua = navigator.userAgent || '';
+        var ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        var android = /Android/i.test(ua);
+        function media(q) { try { return !!(window.matchMedia && window.matchMedia(q).matches); } catch (e) { return false; } }
+        window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; });
+        window.addEventListener('appinstalled', function () { installedFlag = true; deferred = null; });
+        // already running as an installed / home-screen app (a plain browser fullscreen does not count)
+        function installed() {
+          var inBrowserFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement);
+          return installedFlag || navigator.standalone === true || media('(display-mode: standalone)') || media('(display-mode: minimal-ui)') ||
+            (media('(display-mode: fullscreen)') && !inBrowserFullscreen);
+        }
+        return {
+          installed: installed,
+          // 0 = no button (PC, or already an app), 1 = Android (the browser's install dialog), 2 = iPhone / iPad (how-to overlay)
+          mode: function () { if (installed()) return 0; if (ios) return 2; if (android) return 1; return 0; },
+          // must run inside the click that asked for it (transient user activation); 1 = the browser's own dialog opened
+          request: function () {
+            if (!deferred) return 0;
+            var ev = deferred;
+            deferred = null;   // an event can be prompted once
+            try {
+              ev.prompt();
+              if (ev.userChoice && ev.userChoice.then) ev.userChoice.then(function (c) { if (c && c.outcome === 'accepted') installedFlag = true; });
+              return 1;
+            } catch (e) { return 0; }
+          }
+        };
+      })();
+    </script>
     <style>
       html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #0e1116; overflow: hidden; }
       #unity-canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; background: #0e1116; touch-action: none; }
