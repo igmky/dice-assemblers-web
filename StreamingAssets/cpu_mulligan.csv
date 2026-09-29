@@ -96,6 +96,10 @@ Seed,C31,18,6,0,zero,false,generic,zero
 Seed,C12,22,2,1,awaken,false,curve,zero
 Seed,CMD08,16,4,0,awaken,false,generic,zero
 Seed,LC3,38,0,0,zero,true,payoff,zero
+Merchant,F58,40,0,1,town,true,enabler,market
+Merchant,F56,38,0,1,town,true,enabler,market
+Merchant,F57,34,0,1,town,true,enabler,market
+Merchant,F59,32,0,1,town,true,enabler,market
 Merchant,F31,36,0,2,coin,true,curve,market
 Merchant,F40,30,0,2,market,true,enabler,market
 Merchant,F47,30,0,2,market,true,curve,market
