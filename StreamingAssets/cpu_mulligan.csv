@@ -165,6 +165,7 @@ Meikun,W01,26,0,1,,false,curve,curse
 Meikun,O08,14,4,0,copy,false,generic,curse
 Meikun,O09,18,4,0,curse,false,payoff,curse
 Meikun,LO1,38,0,0,curse,true,payoff,curse
+Meikun,O32,28,0,1,void,true,curve,void
 Al,W01,30,0,1,,true,curve,basics
 Al,W02,22,0,1,,false,curve,basics
 Al,W03,22,0,1,,false,curve,basics
