@@ -1,0 +1,43 @@
+# Publishes one WebGL build to GitHub Pages.
+# The build is not kept in git (its WebGL.data outgrows GitHub's 100 MB file limit): it is attached to a
+# release as site.zip, and this workflow puts that zip on Pages. Run it with the release tag, e.g. web-57.
+name: Deploy WebGL build
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag holding site.zip (e.g. web-57)"
+        required: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download the build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "${{ inputs.tag }}" --repo "${{ github.repository }}" --pattern site.zip
+          mkdir _site
+          unzip -q site.zip -d _site
+          test -f _site/index.html
+          ls -la _site _site/Build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
