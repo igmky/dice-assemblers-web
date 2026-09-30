@@ -201,6 +201,7 @@ Nyargona,O21,18,2,1,shard,false,enabler,replay
 Nyargona,O22,20,2,1,shard,false,payoff,replay
 Nyargona,O23,22,2,1,copy,false,enabler,replay
 Nyargona,O24,14,4,0,omega,false,payoff,replay
+Nyargona,O31,16,2,1,hinder,false,generic,replay
 Nyargona,LO4,38,0,0,replay,true,payoff,replay
 MeikunPast,T36,24,2,1,awaken,false,enabler,awaken
 MeikunPast,T37,30,0,2,awaken,true,curve,awaken
