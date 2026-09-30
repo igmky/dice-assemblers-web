@@ -194,6 +194,11 @@ AlAwakened,W26,24,0,1,,false,curve,alpha
 AlAwakened,LO3,38,0,0,alpha,true,payoff,alpha
 AlAwakened,O15,20,2,0,alpha,false,payoff,alpha
 AlAwakened,O16,12,6,0,alpha,false,payoff,alpha
+AlAwakened,O33,14,2,1,rule,false,generic,read
+AlAwakened,O34,18,2,1,read,false,enabler,read
+AlAwakened,O35,16,2,1,read,false,enabler,read
+AlAwakened,O36,16,2,1,read,false,enabler,read
+AlAwakened,O37,18,2,1,hinder,false,generic,read
 Nyargona,O17,30,0,2,strike,true,curve,replay
 Nyargona,O18,22,2,1,once,false,enabler,replay
 Nyargona,O19,22,2,1,replay,false,payoff,replay
